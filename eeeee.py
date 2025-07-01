@@ -1,0 +1,14 @@
+a=float(input("輸入數學成績"))
+b=float(input("輸入自然成績"))
+c=float(input("輸入國文成績"))
+d=float(input("輸入社會成績"))
+e=float(input("輸入英文成績"))
+print("數學成績",a)
+print("自然成績",b)
+print("國文成績",c)
+print("社會成績",d)
+print("英文成績",e)
+x=a+b+c+d+e
+print("總分",x)
+y=x/5
+print("平均",y)

@@ -17,9 +17,8 @@ def home():
     <h2 style="text-align:center;">國中會考加權分數計算機</h2>
     <div class="container">
     ...
-<h2 style="text-align:center;">國中會考加權分數計算機</h2>
-  <div class="container">
-  <div class="card">
+ 
+   <div class="card">
     <h3>計算數學成績</h3>
     <form method="post">
       <input type="hidden" name="form_type" value="math">

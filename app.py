@@ -5,7 +5,19 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def home():
     return """
-  <h2 style="text-align:center;">國中會考加權分數計算機</h2>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國中會考加權分數計算機</title>
+    <meta name="keywords" content="國中會考, 會考分數計算, 國中英文成績, 國中數學成績, 線上會考工具, 加權分數計算">
+</head>
+<body>
+    <h2 style="text-align:center;">國中會考加權分數計算機</h2>
+    <div class="container">
+    ...
+<h2 style="text-align:center;">國中會考加權分數計算機</h2>
   <div class="container">
   <div class="card">
     <h3>計算數學成績</h3>

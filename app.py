@@ -2,11 +2,10 @@ from flask import Flask, request, render_template_string, send_from_directory
 
 app = Flask(__name__)
 
-# 👇 這個路由讓 Google Search Console 能讀到驗證檔案
+# 提供 Google 驗證檔案
 @app.route('/google1de2d1d33522ed28.html')
 def serve_verification_file():
     return send_from_directory('.', 'google1de2d1d33522ed28.html')
-
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -16,32 +15,37 @@ def home():
         # 計算數學加權分數
         if form_type == "math":
             try:
-                math_correct = int(request.form["math_correct"])
-                math_nonchoice = int(request.form["math_nonchoice"])
+                a = int(request.form.get("math_correct", 0))
+                a_total = int(request.form.get("math_choice_total", 1))
+                b = int(request.form.get("math_nonchoice", 0))
+                b_total = int(request.form.get("math_nonchoice_total", 1))
             except ValueError:
                 return "請輸入正確的數字！"
 
-            math_score = math_correct * (85 / 25) + math_nonchoice * (15 / 6)
+            choice_score = (a / a_total) * 85
+            nonchoice_score = (b / b_total) * 15
+            math_score = choice_score + nonchoice_score
+
             return render_template_string("""
-                <h2>數學加權分數計算結果</h2>
-                <p>數學加權分數: {{ math_score }}</p>
+                <h2>數學加權分數結果</h2>
+                <p>數學加權分數 = {{ math_score }}</p>
                 <a href="/">返回</a>
             """, math_score=round(math_score, 2))
-        
+
         # 計算英文加權分數
         elif form_type == "english":
             try:
-                eng_listen = int(request.form["eng_listen"])
-                eng_read = int(request.form["eng_read"])
+                c = int(request.form.get("eng_listen", 0))
+                c_total = int(request.form.get("eng_listen_total", 1))
+                d = int(request.form.get("eng_read", 0))
+                d_total = int(request.form.get("eng_read_total", 1))
             except ValueError:
                 return "請輸入正確的數字！"
 
-            listen_total = 21
-            read_total = 43
-            english_score = (eng_listen / listen_total) * 20 + (eng_read / read_total) * 80
+            english_score = (c / c_total) * 20 + (d / d_total) * 80
             return render_template_string("""
-                <h2>英文加權分數計算結果</h2>
-                <p>英文加權分數: {{ english_score }}</p>
+                <h2>英文加權分數結果</h2>
+                <p>英文加權分數 = {{ english_score }}</p>
                 <a href="/">返回</a>
             """, english_score=round(english_score, 2))
 
@@ -51,12 +55,12 @@ def home():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>國中會考加權分數計算機</title>
-    <meta name="keywords" content="國中會考, 會考分數計算, 國中英文成績, 國中數學成績, 線上會考工具, 加權分數計算">
+    <title>國三生們加油! 一起來算算你的會考數學或英文加權分數吧~</title>
+    <meta name="description" content="我是miumiu~ 這個網頁很讚喔~ 你們可以不用再按計算機還要再加起來(真的很麻煩)，模模考或是練習的題本用這個很方便，幫你省下時間，可以多訂正一題~">
     <style>
         body {
             font-family: "微軟正黑體", sans-serif;
-            background-color: #f5f0ff;  /* 淺紫色 */
+            background-color: #f5f0ff;
             padding: 30px;
         }
         .container {
@@ -105,7 +109,9 @@ def home():
             <form method="post">
                 <input type="hidden" name="form_type" value="math">
                 數學選擇題對的題數：<input type="number" name="math_correct"><br>
-                數學非選擇題得分：<input type="number" name="math_nonchoice"><br><br>
+                數學選擇題總題數：<input type="number" name="math_choice_total"><br>
+                數學非選擇題得分：<input type="number" name="math_nonchoice"><br>
+                數學非選擇題總分：<input type="number" name="math_nonchoice_total"><br><br>
                 <button type="submit">計算數學分數</button>
             </form>
         </div>
@@ -115,7 +121,9 @@ def home():
             <form method="post">
                 <input type="hidden" name="form_type" value="english">
                 英文聽力對的題數：<input type="number" name="eng_listen"><br>
-                英文閱讀對的題數：<input type="number" name="eng_read"><br><br>
+                英文聽力總題數：<input type="number" name="eng_listen_total"><br>
+                英文閱讀對的題數：<input type="number" name="eng_read"><br>
+                英文閱讀總題數：<input type="number" name="eng_read_total"><br><br>
                 <button type="submit">計算英文分數</button>
             </form>
         </div>
